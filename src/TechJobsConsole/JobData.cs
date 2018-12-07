@@ -9,7 +9,7 @@ namespace TechJobsConsole
     {
         static List<Dictionary<string, string>> AllJobs = new List<Dictionary<string, string>>();
         static bool IsDataLoaded = false;
-
+        //---------------------------------1
         public static List<Dictionary<string, string>> FindAll()
         {
             LoadData();
@@ -20,6 +20,7 @@ namespace TechJobsConsole
          * Returns a list of all values contained in a given column,
          * without duplicates. 
          */
+        //------------------------------------2
         public static List<string> FindAll(string column)
         {
             LoadData();
@@ -38,6 +39,7 @@ namespace TechJobsConsole
             return values;
         }
 
+        //---------------------------------------------3
         public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
         {
             // load data, if not already loaded
@@ -48,22 +50,46 @@ namespace TechJobsConsole
             foreach (Dictionary<string, string> row in AllJobs)
             {
                 string aValue = row[column];
-
-                if (aValue.Contains(value))
+                //lower case the values at the comparison level without altering the captilization
+                if (aValue.ToLower().Contains(value.ToLower()))
                 {
-                    jobs.Add(row);
+                    jobs.Add(row); 
                 }
             }
 
             return jobs;
         }
+        //------------------------------------------------------------------Find by value
+        public static List<Dictionary<string, string>> FindByValue(string value)
+        {
+            LoadData();
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+
+            foreach (Dictionary<string, string> row in AllJobs)
+            {
+                foreach (KeyValuePair<string, string> item in row)
+                {
+                    if (item.Value.ToLower().Contains(value.ToLower()) && !jobs.Contains(row))
+                    {
+                        jobs.Add(row);
+                    }
+                }
+            }
+            return jobs;
+                  
+
+       
+        }
+
+
 
         /*
          * Load and parse data from job_data.csv
          */
+        //-----------------------------------------4
         private static void LoadData()
         {
-
+            //once return statement is hit function ends
             if (IsDataLoaded)
             {
                 return;
@@ -101,10 +127,10 @@ namespace TechJobsConsole
 
             IsDataLoaded = true;
         }
-
         /*
          * Parse a single line of a CSV file into a string array
          */
+        //-----------------------------------------5
         private static string[] CSVRowToStringArray(string row, char fieldSeparator = ',', char stringSeparator = '\"')
         {
             bool isBetweenQuotes = false;
@@ -138,5 +164,10 @@ namespace TechJobsConsole
 
             return rowValues.ToArray();
         }
-    }
+
+        
+    }   
+        
+
+        
 }
